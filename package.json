@@ -6,8 +6,10 @@
   "files": [
     "ble.coffee",
     "README.md",
-    "ble-config-schema.coffee"
+    "ble-config-schema.coffee",
+    "LICENSE"
   ],
+  "license": "GPL-2.0",
   "version": "0.8.0",
   "homepage": "https://github.com/josecastroleon/pimatic-ble",
   "configSchema": "ble-config-schema.coffee",
@@ -15,7 +17,7 @@
     "noble": "^1.0.1"
   },
   "peerDependencies": {
-    "pimatic": "0.8.*"
+    "pimatic": ">=0.8.0 <1.0.0"
   },
   "engines": {
     "node": ">0.8.x",
