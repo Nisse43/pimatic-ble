@@ -7,6 +7,7 @@ module.exports = (env) ->
 
   class BLEPlugin extends env.plugins.Plugin
     init: (app, @framework, @config) =>
+      @debug =  @config.debug
       @devices = []
       @peripheralNames = []
       @discovered = false
@@ -14,8 +15,9 @@ module.exports = (env) ->
       @noble = require "noble"
       setInterval( =>
         if @devices?.length > 0
-          env.logger.debug "Scan for devices"
-          env.logger.debug @devices
+          if @debug
+            env.logger.debug "Scan for devices"
+            env.logger.debug @devices
           @noble.startScanning([],true)
       , 10000)
 
@@ -23,7 +25,8 @@ module.exports = (env) ->
         if not @discovered
           @discovered = true
           if (@peripheralNames.indexOf(peripheral.advertisement.localName) >= 0)
-            env.logger.debug "Device found "+ peripheral.uuid
+            if @debug
+              env.logger.debug "Device found "+ peripheral.uuid
             @noble.stopScanning()
             @emit "discover", peripheral
           @discoverd = false
@@ -33,16 +36,18 @@ module.exports = (env) ->
           @noble.startScanning([],true)
 
     registerName: (name) =>
-      env.logger.debug "Registering peripheral name "+name
+      if @debug
+        env.logger.debug "Registering peripheral name "+name
       @peripheralNames.push name
 
     addOnScan: (uuid) =>
-      env.logger.debug "Adding device "+uuid
+      if @debug
+        env.logger.debug "Adding device "+uuid
       @devices.push uuid
 
     removeFromScan: (uuid) =>
-      env.logger.debug "Removing device "+uuid
+      if @debug
+        env.logger.debug "Removing device "+uuid
       @devices.splice @devices.indexOf(uuid), 1
 
-  plugin = new BLEPlugin
-  return plugin
+  return new BLEPlugin
